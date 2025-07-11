@@ -1,14 +1,13 @@
 import { useState } from 'react'
+import Table from "./Table";
 
-
+let num=2;
 function App() {
-  
-
-  return (
-    <>
-    <div className="text-5xl">hello</div>
-      
-    </>
+  return(
+    <div class="flex gap-3">
+        <Table></Table>
+        <Table></Table>
+    </div>
   )
 }
 
