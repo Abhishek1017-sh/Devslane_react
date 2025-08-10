@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import ProductCard from "./ProductCard";
 
 function ProductList({products=[]}){
@@ -20,4 +20,4 @@ function ProductList({products=[]}){
         </div>
     )
 }
-export default ProductList;
+export default memo(ProductList);

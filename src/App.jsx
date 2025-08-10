@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Link, Routes,Route } from 'react-router-dom';
 import HomePage from './HomePage';
 import Header from './Header';
@@ -12,31 +12,25 @@ function App() {
   const savedData=JSON.parse(savedDataString);
 
   const [cart,setCart]=useState(savedData);
-  const  [count,setCount]=useState(0);
-  function handleChangeCount(){
-    setCount(count+1);
-  }
+  
 
-  function handleAddToCart(productId,count){
-    const oldCount=cart[productId] || 0;
-    // const newCart={...cart};
-    // newCart[productId]=oldCount+count;
-    // setCart(newCart);
-    const newCart={...cart,[productId]:oldCount+count};
-    setCart(newCart);
-    const cartString=JSON.stringify(newCart);
-    localStorage.setItem("my-cart",cartString);
-  }
-  const totalCount=Object.keys(cart).reduce(function(previous,current){
-    return previous+cart[current];
-  },0);
+  const handleAddToCart = useCallback((productId, count) => {
+    setCart(prevCart => {
+      const oldCount = prevCart[productId] || 0;
+      const newCart = { ...prevCart, [productId]: oldCount + count };
+      localStorage.setItem("my-cart", JSON.stringify(newCart));
+      return newCart;
+    });
+  }, []);
+  const totalCount = useMemo(() => {
+    return Object.values(cart).reduce((total, qty) => total + qty, 0);
+  }, [cart]);
 
   return (
     <>
         <div className='bg-gray-300 h-screen overflow-y-auto flex flex-col'>
           <Header productCount={totalCount}/>
           <div className='grow'>
-            <button onClick={handleChangeCount} className='p-2 bg-indigo-200'>Change count</button>
             <Routes>
                 <Route index element={<HomePage />}></Route>
                 <Route path="/products/:id" element={<Details onAddToCart={handleAddToCart}/>}></Route>

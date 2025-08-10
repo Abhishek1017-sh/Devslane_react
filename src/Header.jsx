@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { BsBag } from "react-icons/bs";
 
 function Header({productCount}) {
@@ -16,4 +16,4 @@ function Header({productCount}) {
     </div>
   );
 }
-export default Header;
+export default memo(Header);

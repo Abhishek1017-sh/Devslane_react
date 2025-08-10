@@ -1,5 +1,5 @@
 import ProductList from "./ProductList";
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, memo, useCallback } from 'react';
 import { GetProductList } from "./api";
 import NoMatching from "./NoMatching";
 import Loading from "./Loading";
@@ -21,34 +21,24 @@ function Filter(){
   const [query, setQuery]=useState('');
   const [sort, setSort]=useState("default");
 
-  let data=productList.filter(function(item){
-    const lowerCaseTitle=item.title.toLowerCase();
-    const lowerCaseQuery=query.toLowerCase();
-    return lowerCaseTitle.indexOf(lowerCaseQuery)!=-1;
-  })
-  
-  if(sort === 'sortLH'){
-    data=data.sort(function(a,b){
-      return Number(a.price) - Number(b.price);
-    });
-  }
-  if(sort === 'sortHL'){
-    data=data.sort(function(a,b){
-      return Number(b.price) - Number(a.price);
-    });
-  }
-  if(sort === 'sortName'){
-    data=data.sort(function(a,b){
-      return a.title.localeCompare(b.title);
-    });
-  }
+  const filteredData = useMemo(() => {
+    let data = productList.filter(item =>
+      item.title.toLowerCase().includes(query.toLowerCase())
+    );
+    if (sort === 'sortLH') data.sort((a, b) => a.price - b.price);
+    if (sort === 'sortHL') data.sort((a, b) => b.price - a.price);
+    if (sort === 'sortName') data.sort((a, b) => a.title.localeCompare(b.title));
+    return data;
+  }, [productList, query, sort]);
 
-  function handleQueryChange(event){
-    setQuery(event.target.value);
-  }
-  function handleSortChange(event){
-    setSort(event.target.value);
-  }
+  const handleQueryChange = useCallback((e) => {
+    setQuery(e.target.value);
+  }, []);
+
+  const handleSortChange = useCallback((e) => {
+    setSort(e.target.value);
+  }, []);
+  
   if(loading){
     return <Loading />;
   }
@@ -69,9 +59,9 @@ function Filter(){
             <option value="sortHL">Sort by price: high to low</option>
         </select>
     </div>
-    {data.length >0 && <ProductList products={data} />}
-    {data.length == 0 && <NoMatching />}
+    {filteredData.length >0 && <ProductList products={filteredData} />}
+    {filteredData.length == 0 && <NoMatching />}
     </>
   )
 }
-export default Filter;
+export default memo(Filter);
