@@ -5,7 +5,7 @@ import Signup from "./SignupForm.jsx";
 import ForgotPassword from "./ForgotPassword";
 import Input from "./Input";
 import { MdShoppingCartCheckout } from "react-icons/md";
-import cartzyImage from 'src\assets\Cartzy.logo.png';
+import cartzyImage from './assets/Cartzy.logo.png';
 
 function App() {
   const [query, setQuery] = useState("");
