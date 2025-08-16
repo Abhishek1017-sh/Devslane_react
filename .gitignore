@@ -11,6 +11,12 @@ node_modules
 dist
 dist-ssr
 *.local
+A.jsx
+B.jsx
+C.jsx
+FormikInput.jsx
+Login.jsx
+
 
 # Editor directories and files
 .vscode/*
