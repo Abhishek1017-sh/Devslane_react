@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import { BsBag } from "react-icons/bs";
+import { Link } from 'react-router';
 
 function Header({productCount}) {
   return (
@@ -9,8 +10,10 @@ function Header({productCount}) {
           <img src="/Cartzy.logo.png" alt="Cartzy Logo" className="h-12 w-auto object-contain" />
         </div>
         <div className="text-2xl text-gray-700">
-          <BsBag />
-          <span>{productCount}</span>
+          <Link to="/cart" className="mr-4">
+            <BsBag /><span>{productCount}</span>
+          </Link>
+          
         </div>
       </nav>
     </div>
