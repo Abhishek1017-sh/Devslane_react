@@ -39,7 +39,7 @@ export default function Details({onAddToCart}) {
     return (
     <>
         <div className= 'bg-gray-100'>
-        <Link to="/" className="flex items-center gap-2 text-gray-600 hover:text-black transition px-6 py-4 w-fit">
+        <Link to="/dashboard" className="flex items-center gap-2 text-gray-600 hover:text-black transition px-6 py-4 w-fit">
             <HiArrowNarrowLeft className="text-2xl" />
             <span className="text-lg font-medium">Back</span>
         </Link>
@@ -63,7 +63,7 @@ export default function Details({onAddToCart}) {
                         </p>
                         <div className="flex gap-4 mb-2 ">
                             <input className="bg-white border-2 h-10 w-14" type="number" min="1" value={count} onChange={handleCountChange}></input>
-                            <button onClick={handleButtonClick} className="bg-red-500 text-white px-4 h-10 py-2 rounded  hover:bg-red-700">Add to Cart</button>
+                            <button onClick={handleButtonClick} className="bg-red-500 text-white px-4 h-10 py-2 rounded whitespace-nowrap hover:bg-red-700">Add to Cart</button>
                         </div>
                     </div>
                 </div>
@@ -71,13 +71,13 @@ export default function Details({onAddToCart}) {
         </div>
         <div className='flex justify-between'>
             <div>
-            {id>1 && <Link to={"/products/"+(id-1)} className="flex items-center gap-2 text-gray-600 hover:text-black transition px-6 py-4 w-fit">
+            {id>1 && <Link to={"/dashboard/products/"+(id-1)} className="flex items-center gap-2 text-gray-600 hover:text-black transition px-6 py-4 w-fit">
                 <HiArrowNarrowLeft className="text-2xl" />
                 <span className="text-lg font-medium">Previous</span>
             </Link>}
             </div>
             <div>
-            <Link to={"/products/"+(id+1)} className="flex items-center gap-2 text-gray-600 hover:text-black transition px-6 py-4 w-fit">
+            <Link to={"/dashboard/products/"+(id+1)} className="flex items-center gap-2 text-gray-600 hover:text-black transition px-6 py-4 w-fit">
                 <HiArrowNarrowRight className="text-2xl" />
                 <span className="text-lg font-medium">Next</span>
             </Link>
