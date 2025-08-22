@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { CiUser } from "react-icons/ci";
@@ -6,22 +6,36 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import Input, { FormikInput } from "./Input";
 import Button from "./Button";
 import { MdShoppingCartCheckout } from "react-icons/md";
+import axios from "axios";
+import { useContext } from "react";
+import { UserContext } from "./App";
 
 function Login() {
+  const {user,setUser}=useContext(UserContext);
+  if(user){
+    return <Navigate to="/dashboard"/>
+  }
+
   const schema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email (must include @ and .)")
       .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Email must contain a dot")
       .required("Required"),
-    password: Yup.string().min(8, "Min 8 chars").required("Required"),
+    password: Yup.string().min(6, "Min 6 chars").required("Required"),
   });
 
   function handleLogin(values) {
-    console.log("Login:", values);
-  }
+    axios.post("https://myeasykart.codeyogi.io/login",
+      {email: values.email, password: values.password}).then((response) => {
+        const {user,token}= response.data;
+        localStorage.setItem("token", token); 
+        setUser(user);
+    }).catch(() => {
+        console.log("Invalid credentials")});
+    }
 
   return (
-    <div className="w-full max-w-sm mx-auto bg-white p-6 rounded-2xl shadow-md">
+    <div className="w-full max-w-sm mx-auto bg-white p-6 rounded-2xl shadow-md m-2">
       <h2 className="text-center text-2xl font-bold mb-4 text-blue-600">
         Login To Cartzy
       </h2>
