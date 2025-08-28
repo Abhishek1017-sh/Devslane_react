@@ -1,13 +1,10 @@
 import React from "react";
 import Button from "./Button";
+import { WithCart } from "./WithProvider";
 
-export default function CartTotal({ cartItems, cartData }) {
+function CartTotal({cart}) {
   function totalAmount() {
-    return cartItems
-      .reduce((total, item) => {
-        const quantity = cartData[item.id] || 0;
-        return total + item.price * quantity;
-      }, 0)
+    return cart.reduce((total, item) => total + item.product.price * item.quantity, 0)
       .toFixed(2);
   }
 
@@ -36,3 +33,4 @@ export default function CartTotal({ cartItems, cartData }) {
     </div>
   );
 }
+export default WithCart(CartTotal);

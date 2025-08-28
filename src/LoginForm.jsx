@@ -8,9 +8,10 @@ import { FormikInput } from "./Input";
 import Button from "./Button";
 import axios from "axios";
 import { useContext } from "react";
-import { UserContext } from "./App";
+import { UserContext } from "./Contexts";
+import WithProvider, { WithAlert } from "./WithProvider";
 
-function Login() {
+function Login({ setAlert }) {
   const { user, setUser } = useContext(UserContext);
   if (user) {
     return <Navigate to="/dashboard" />;
@@ -36,7 +37,7 @@ function Login() {
         setUser(user);
       })
       .catch(() => {
-        console.log("Invalid credentials");
+        setAlert({type:"error", message:"Invalid credentials"});
       });
   }
 
@@ -102,4 +103,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default WithAlert(Login);

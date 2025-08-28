@@ -1,26 +1,35 @@
 import React, { useEffect, useState } from "react";
 import CartRow from "./CartRow";
 import Button from "./Button";
+import { WithCart } from "./WithProvider";
 
-function CartList({ products, cart, updateCart }) {
-    const [localCart, setLocalCart] = useState(cart || {});
+function CartList({cart, updateCart }) {
 
+    const [quantityMap, setQuantityMap] = useState({});
+
+    const cartToQuantityMap=cart.reduce(function(m,cartItem){
+            return {...m,[cartItem.product.id]:cartItem.quantity};
+    },{});
+    
     useEffect(() => {
-        setLocalCart(cart);
+        setQuantityMap(cartToQuantityMap);
     }, [cart]);
 
     function handleQuantityChange(productId, newValue) {
-        const newLocalCart = { ...localCart, [productId]: parseInt(newValue) || 0 };
-        setLocalCart(newLocalCart);
+        const newQuantityMap={...quantityMap,[productId]:newValue};
+        setQuantityMap(newQuantityMap);
     }
 
     function handleUpdateCart() {
-        updateCart(localCart);
+        const newCart = cart.map((item) => ({
+            product: item.product,
+            quantity: quantityMap[item.product.id] || item.quantity,
+        }));
+        updateCart(newCart);
     }
 
     function handleRemove(productId) {
-        const newCart = { ...cart };
-        delete newCart[productId];
+        const newCart = cart.filter((item) => item.product.id !== productId);
         updateCart(newCart);
     }
 
@@ -35,13 +44,13 @@ function CartList({ products, cart, updateCart }) {
                 <span>Subtotal</span>
             </div>
 
-            {products.map((p) => (
+            {cart.map((cartItem) => (
                 <CartRow
-                    key={p.id}
+                    key={cartItem.product.id}
                     onQunatityChange={handleQuantityChange}
                     onRemove={handleRemove}
-                    product={p}
-                    quantity={localCart[p.id] || 0}
+                    product={cartItem.product}
+                    quantity={quantityMap[cartItem.product.id]}
                 />
             ))}
 
@@ -52,4 +61,4 @@ function CartList({ products, cart, updateCart }) {
     );
 }
 
-export default CartList;
+export default WithCart(CartList);

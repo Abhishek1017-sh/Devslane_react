@@ -1,29 +1,23 @@
 import React, { useState, useCallback } from 'react';
 import { Navigate, Routes, Route } from 'react-router-dom';
-import WithUser from './WithUser';
 import HomePage from './HomePage';
 import CartPage from './CartPage';
 import Details from './MoreDetails';
 import NotFound from './NotFound';
+import { WithCart, WithUser } from './WithProvider';
 
-function Dashboard({ user,cart, updateCart }) {
+function Dashboard({ user,cart, updateCart , handleAddToCart}) {
   if (!user) {
     return <Navigate to="/login" />;
   }
-
-  const handleAddToCart = useCallback((productId, count) => {
-    const oldCount = cart[productId] || 0;
-    const newCart = { ...cart, [productId]: oldCount + count };
-    updateCart(newCart);
-  }, [cart, updateCart]);
 
   return (
     <>
       <div className="grow">
         <Routes>
           <Route index element={<HomePage />} />
-          <Route path="cart" element={<CartPage cart={cart} updateCart={updateCart} />} />
-          <Route path="products/:id" element={<Details onAddToCart={handleAddToCart} />} />
+          <Route path="cart" element={<CartPage />} />
+          <Route path="products/:id" element={<Details />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
@@ -31,4 +25,4 @@ function Dashboard({ user,cart, updateCart }) {
   );
 }
 
-export default WithUser(Dashboard);
+export default WithUser(WithCart(Dashboard));

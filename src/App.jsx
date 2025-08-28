@@ -1,4 +1,4 @@
-import React, { useMemo, useState, createContext, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
@@ -10,68 +10,28 @@ import Dashboard from "./Dashboard.jsx";
 import axios from "axios";
 import AuthRoute from "./AuthRoute.jsx";
 import UserRoutes from "./UserRoutes.jsx";
+import Alert from './Alert.jsx';
+import { UserContext, AlertContext } from './Contexts';
+import UserProvider from "./providers/UserProvider"
+import AlertProvider from "./providers/AlertProvider"
+import CartProvider from './providers/CartProvider.jsx';
+import { WithCart } from './WithProvider.jsx';
 
-export const UserContext = createContext();
-
-function App() {
+function App({cartCount}) {
   const [query, setQuery] = useState("");
-  const [user, setUser] = useState();
-  const [loadingUser, setLoadingUser] = useState(true);
-  const token = localStorage.getItem("token");
-
-  const savedDataString = localStorage.getItem("my-cart") || "{}";
-  const savedData = JSON.parse(savedDataString);
-  const [cart, setCart] = useState(savedData);
-
-  useEffect(() => {
-    localStorage.setItem("my-cart", JSON.stringify(cart));
-  }, [cart]);
-
-  useEffect(() => {
-    if (token) {
-      axios.get("https://myeasykart.codeyogi.io/me", {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((response) => {
-        console.log("User fetched:", response.data);
-        setUser(response.data);
-      })
-      .catch((err) => {
-        console.error("Unauthorized:", err);
-        localStorage.removeItem("token");
-        setUser(null);
-      })
-      .finally(() => setLoadingUser(false));
-    } else {
-      setLoadingUser(false);
-    }
-  }, []);
-
-  console.log("logged in user is:", user);
-
-  function handleSearch(e) {
-    setQuery(e.target.value);
-  }
-
-  const totalCount = useMemo(() => {
-    return Object.values(cart || {}).reduce((total, qty) => total + qty, 0);
-  }, [cart]);
-
-  if (loadingUser) {
-    return <div>Loading...</div>
-  }
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserProvider>
+      <CartProvider>
+      <AlertProvider>
       <div className="bg-gray-300 h-screen overflow-y-auto flex flex-col">
-        <Header productCount={totalCount} setUser={setUser} />
+        <Header productCount={cartCount} />
+        <Alert/>
         <div className="flex flex-1 justify-center items-center">
           <Routes>
-            <Route path="/dashboard/*" element={<UserRoutes><Dashboard cart={cart} updateCart={setCart}/></UserRoutes>} />
-            <Route path="/login" element={<AuthRoute><Login /></AuthRoute>} />
-            <Route path="/signup" element={<Signup />} />
+            <Route path="/dashboard/*" element={<UserRoutes><Dashboard /></UserRoutes>} />
+            <Route path="/login" element={<AuthRoute> <Login /> </AuthRoute>} />
+            <Route path="/signup" element={<AuthRoute> <Signup /> </AuthRoute>} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route
               path="*"
@@ -106,8 +66,10 @@ function App() {
         </div>
         <Footer />
       </div>
-    </UserContext.Provider>
+      </AlertProvider>
+      </CartProvider>
+      </UserProvider>
   )
 }
 
-export default App;
+export default WithCart(App);

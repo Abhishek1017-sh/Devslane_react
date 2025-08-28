@@ -1,28 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { GetProductData } from "./api";
+import { GetProductData, getProductsByIds } from "./api";
 import Loading from "./Loading";
 import { HiArrowNarrowLeft } from "react-icons/hi";
 import { Link } from "react-router";
 import CartList from "./CartList";
 import CartTotal from "./CartTotal";
+import { WithCart } from "./WithProvider";
 
-function CartPage({ cart, updateCart }) {
-  const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState([]);
-
-  const cartObj = cart || {};
-  const productIds = Object.keys(cartObj);
-
-  useEffect(() => {
-    setLoading(true);
-    const myProductPromises = productIds.map((id) => GetProductData(id));
-    Promise.all(myProductPromises).then((products) => {
-      setProducts(products);
-      setLoading(false);
-    });
-  }, [cart]);
-
-  if (loading) return <Loading />;
+function CartPage() {
 
   return (
     <div className="px-6 py-10">
@@ -35,11 +20,11 @@ function CartPage({ cart, updateCart }) {
       </Link>
 
       <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg p-8">
-        <CartList products={products} cart={cart} updateCart={updateCart} />
-        <CartTotal cartItems={products} cartData={cart} />
+        <CartList />
+        <CartTotal />
       </div>
     </div>
   );
 }
 
-export default CartPage;
+export default WithCart(CartPage);

@@ -7,7 +7,7 @@ import { MdShoppingCartCheckout } from "react-icons/md";
 import Input, { FormikInput } from "./Input";
 import Button from "./Button";
 import { useContext } from "react";
-import { UserContext } from "./App";
+import { UserContext } from "./Contexts";
 import axios from "axios";
 
 function Signup() {
