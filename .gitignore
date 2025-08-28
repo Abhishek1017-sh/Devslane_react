@@ -7,10 +7,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+node_modules_old
 dist
 dist-ssr
 *.local
+A.jsx
+B.jsx
+C.jsx
+FormikInput.jsx
+Login.jsx
+
 
 # Editor directories and files
 .vscode/*
