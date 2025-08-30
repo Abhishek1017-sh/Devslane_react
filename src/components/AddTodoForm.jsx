@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTodos } from "../context/TodoContext";
 
-export default function AddTodoForm({ onCancel }) {
+export default function AddToDoForm({ onCancel }) {
   const { addTodo } = useTodos();
   const [text, setText] = useState("");
 

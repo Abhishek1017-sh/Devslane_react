@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AddTodoForm from "./AddToDoForm";
+import AddToDoForm from "./AddToDoForm";
 
 export default function AddTodoButton() {
   const [showForm, setShowForm] = useState(false);
@@ -14,7 +14,7 @@ export default function AddTodoButton() {
           + Add a todo
         </button>
       ) : (
-        <AddTodoForm onCancel={() => setShowForm(false)} />
+        <AddToDoForm onCancel={() => setShowForm(false)} />
       )}
     </div>
   );
