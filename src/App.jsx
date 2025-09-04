@@ -1,4 +1,8 @@
-import { useState } from 'react'
+import React from 'react'
+import HappyTracker from './HappyTracker'
+import SadTracker from './SadTracker'
+import HappyIncrementor from './HappyIncrementor'
+import SadIncrementor from './SadIncrementor'
 
 
 function App() {
@@ -6,7 +10,12 @@ function App() {
 
   return (
     <>
-    <div className="text-5xl">hello</div>
+    <div className="p-2 space-y-2">
+      <HappyTracker />
+      <SadTracker />
+      <HappyIncrementor />
+      <SadIncrementor />
+    </div>
       
     </>
   )
